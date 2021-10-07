@@ -124,10 +124,13 @@ public class Cajero extends TelegramLongPollingBot{
                                 b.getClientes().get(i).setPin(mensajeUsuario);
                                 System.out.println(b.getClientes().get(i).getPin());
                                 salida_mensaje(registro_correcto,Id);
+                                salida_mensaje(hola_usuario+b.buscarNombre(Id), Id);
+                                salida_mensaje(pedir_pin,Id);
+                                estadoUsuario.put(Id,4);
                                 break;
                             } 
                         }
-                        estadoUsuario.put(Id,3);
+                        //estadoUsuario.put(Id,3);
                         }
                         else{
                             salida_mensaje(error_pin, Id);
@@ -338,6 +341,12 @@ public class Cajero extends TelegramLongPollingBot{
                     Cuenta c_actual=b.buscarCliente(Id).getCuentas().get(cuentaActual.get(Id)-1);
                     try {
                         double monto_retiro= Double.parseDouble(mensajeUsuario);
+                        if(monto_retiro<0){
+                            salida_mensaje("El monto no puede ser negativo, intente nuevamente.",Id);
+                            salida_mensaje(retiro+c_actual.getMoneda()+":",Id);
+                            estadoUsuario.put(Id,10);
+                            break;
+                        }
                         if(monto_retiro==0){
                             salida_mensaje(error_cero,Id);
                             salida_mensaje(menu,Id);
